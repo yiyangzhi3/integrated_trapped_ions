@@ -1,0 +1,8 @@
+Source image: Gen_1_Paper/ca_indiv.tiff
+Shape: height=243, width=669, channels=3
+Intensity conversion: 0.2126*R + 0.7152*G + 0.0722*B
+Background estimate: scipy.ndimage.median_filter(intensity, size=31)
+Feature mask: background_subtracted >= 99.7 percentile
+Feature filtering: area >= 8 pixels and not touching image border
+Feature threshold: 90
+Features saved: 4

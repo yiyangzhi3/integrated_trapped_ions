@@ -1,0 +1,5 @@
+Digitized from /Users/yiyangzhi/Downloads/Ba_energy_levels/intensity.pdf embedded raster image.
+Image size: 2363 x 1768 px
+Plot frame px: left=331, right=2284, top=58, bottom=1542
+Axis calibration: x=0.0..176.9 um, y=0.0..0.12 mW/cm^2
+Dielectric edge x=64.9449 um

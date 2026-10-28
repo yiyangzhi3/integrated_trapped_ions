@@ -20,7 +20,7 @@ class Experimental_Import:
     def __init__(self, pixel_size_um=5.3, magnification=50):
         self.spacing = pixel_size_um / magnification  # µm per pixel, in x and y.
 
-    def align_cache_zone(self, file_path):
+    def align_cache_zone(self, file_path, *, manual=False):
         """Return (x, y, image, angle, x_old, y_old, image_old) for a TIFF.
 
         x and y are in µm, centered on the leftmost trench edge midpoint.
@@ -28,6 +28,14 @@ class Experimental_Import:
         positive counterclockwise. Rotation keeps the original image size.
         x_old and y_old start at zero and increase along columns and rows;
         image_old is the original TIFF before rotation.
+
+        By default the mirror edge is detected automatically. With manual=True,
+        select an ROI (opposite corners) to zoom in, then TOP and BOTTOM points
+        on the same left mirror edge to determine its angle. Repeat the ROI
+        and TOP/BOTTOM selections on the rotated image to set the origin at
+        their midpoint, as in ITI_Profiling_Align_QCCD.m. Requires an interactive
+        Matplotlib backend, e.g. `%matplotlib qt` in a notebook. Selections use
+        pixel coordinates; the returned axes retain the same µm calibration.
         """
         # 1. Read the TIFF. Array dimensions are rows (y), then columns (x).
         with Image.open(file_path) as tiff:
@@ -42,19 +50,25 @@ class Experimental_Import:
         image_old = image.copy()
 
         # 3. Find the leftmost trench edge and its correction angle.
-        top, bottom = _find_left_edge(image)
+        if manual:
+            _require_interactive_backend()
+            top, bottom = _select_mirror_edge(image, stage="angle")
+        else:
+            top, bottom = _find_left_edge(image)
         delta_x, delta_y = bottom - top
         angle = -np.degrees(np.arctan2(delta_x, delta_y))
 
         # 4. Rotate only the image, with MATLAB-style nearest-neighbor cropping.
         image = ndimage.rotate(image, angle, axes=(1, 0), reshape=False, order=0)
 
-        # Exclude black corners introduced by rotation when finding the edge again.
-        valid = ndimage.rotate(np.ones((Ny, Nx)), angle, reshape=False, order=0)
-        valid = ndimage.binary_erosion(valid, iterations=6)
-
         # 5. Find the midpoint in the rotated image and shift the fixed axes.
-        top, bottom = _find_left_edge(image, valid)
+        if manual:
+            top, bottom = _select_mirror_edge(image, stage="origin")
+        else:
+            # Exclude black corners introduced by rotation from the detector.
+            valid = ndimage.rotate(np.ones((Ny, Nx)), angle, reshape=False, order=0)
+            valid = ndimage.binary_erosion(valid, iterations=6)
+            top, bottom = _find_left_edge(image, valid)
         x0, y0 = (top + bottom) / 2
         x = x - x0 * self.spacing
         y = -(y - y0 * self.spacing)
@@ -135,6 +149,71 @@ class Experimental_Import:
             np.maximum(intensity[i], 0, out=intensity[i])
 
         return intensity
+
+
+def _require_interactive_backend():
+    import matplotlib.pyplot as plt
+    from matplotlib import rcsetup
+
+    backend = plt.get_backend().lower()
+    interactive = {name.lower() for name in rcsetup.interactive_bk}
+    if backend not in interactive and not any(
+        name in backend for name in ("ipympl", "widget")
+    ):
+        raise RuntimeError(
+            "Manual alignment requires an interactive Matplotlib backend. "
+            "Run `%matplotlib qt` before calling align_cache_zone(..., manual=True)."
+        )
+
+
+def _select_mirror_edge(image, *, stage):
+    """Zoom to a user-selected ROI, then pick a vertical mirror edge."""
+    first_step = 1 if stage == "angle" else 3
+    roi = _pick_two_points(
+        image,
+        f"{first_step}/4: Select {stage} zoom box — TOP LEFT, then BOTTOM RIGHT",
+    )
+    if np.any(np.isclose(roi[0], roi[1])):
+        raise ValueError("Zoom-box corners must define a nonzero area.")
+    points = _pick_two_points(
+        image,
+        f"{first_step + 1}/4: Select TOP and BOTTOM of the same left mirror edge",
+        roi=roi,
+    )
+    # Sort so reversing the click order cannot introduce a 180-degree rotation.
+    points = points[np.argsort(points[:, 1])]
+    if np.isclose(points[0, 1], points[1, 1]):
+        raise ValueError("Mirror TOP and BOTTOM points must have different rows.")
+    return points
+
+
+def _pick_two_points(image, title, *, roi=None):
+    """Collect exactly two (column, row) clicks, closing the selection figure."""
+    import matplotlib.pyplot as plt
+
+    height, width = image.shape[:2]
+    fig, ax = plt.subplots(figsize=(12, 8))
+    try:
+        ax.imshow(image, origin="upper", cmap="gray")
+        ax.set(title=title, xlabel="column (pixels)", ylabel="row (pixels)")
+        if roi is not None:
+            ax.set_xlim(sorted(roi[:, 0]))
+            ax.set_ylim(sorted(roi[:, 1], reverse=True))
+        fig.tight_layout()
+        plt.show(block=False)
+        points = np.asarray(fig.ginput(2, timeout=-1, show_clicks=True), dtype=float)
+        if points.shape != (2, 2):
+            raise RuntimeError("Manual alignment cancelled before two points were selected.")
+        if (
+            not np.isfinite(points).all()
+            or np.any(points < 0)
+            or np.any(points[:, 0] > width - 1)
+            or np.any(points[:, 1] > height - 1)
+        ):
+            raise ValueError("Selected points must lie inside the image.")
+        return points
+    finally:
+        plt.close(fig)
 
 
 def _find_left_edge(image, valid=None):

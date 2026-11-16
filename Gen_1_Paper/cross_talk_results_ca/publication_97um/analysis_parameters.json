@@ -1,0 +1,286 @@
+{
+  "reference_height_um": 75.0,
+  "height_half_range_um": 10.0,
+  "radial_half_range_um": 5.0,
+  "radial_step_um": 1.0,
+  "height_step_um": 1.0,
+  "peak_search_half_width_um": null,
+  "peak_tracking": "maximum valid HDR rate on each nearest measured radial row and height plane",
+  "normalization": "central peak on the same height and radial slice",
+  "interpolation": "none; nearest measured height, radial row, and axial pixel",
+  "offsets_by_ion": {
+    "0": [
+      5.0
+    ],
+    "1": [
+      -5.0
+    ]
+  },
+  "wavelength_nm": 729,
+  "ion_index_x_direction": 1,
+  "ion_pitch_um": 5.0,
+  "dark_calibration_path": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Dark_Frames/dark_20261002_113902_15MHz/dark_calibration.npz",
+  "dark_calibration_sha256": "62c206c89d8ad4d7cf9331427a4d70e53fd7eb26cbed005dcccada7e14c455f3",
+  "dark_processing_fingerprint": "0c11a86a3ff9257de285a1b3a6b5cac7a2043db54239463867f988d32f770ac6",
+  "noise_calibration_path": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Dark_Frames/MANUAL",
+  "noise_calibration_fingerprint": "483629d2d297c3d656faa34ebcc52dc5c53f625b833c6a4145f7fa4a01e712fa",
+  "signal_sigma_multiplier": 3.0,
+  "dark_std_ddof": 1,
+  "uncertainty_note": "One signal frame per exposure/height. MANUAL SD is spatial across R+G+B pixel sums (ddof=1), not a temporal uncertainty or the error of the mean.",
+  "color_limits_db": [
+    -40.0,
+    0.0
+  ],
+  "datasets": {
+    "0": {
+      "name": "Gen1_ca_4C_ion0_729nm_crosstalk",
+      "signal_run": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/Gen1_ca_4C_FINAL/ion0/729_nm_crosstalk/signal_20261110_140710_gqzl99ek",
+      "own_reference": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/Gen1_ca_4C_FINAL/ion0/729_nm_crosstalk/focused_20261110_140632_657006_06552f.tiff",
+      "alignment": {
+        "angle_deg": 0.28469718244998093,
+        "origin_px": [
+          712.5651026392964,
+          366.9758273984079
+        ],
+        "pixel_pitch_um": [
+          5.3,
+          5.3
+        ],
+        "magnification": 50.0,
+        "method": "independent manual selection with two view-only zoom boxes",
+        "zoom_display_brightness_gain": 4.0,
+        "rotation_roi_px": [
+          [
+            134.1493506493506,
+            272.12337662337654
+          ],
+          [
+            1257.8896103896107,
+            491.551948051948
+          ]
+        ],
+        "rotation_points_px": [
+          [
+            228.39853372434013,
+            364.9211422985615
+          ],
+          [
+            1201.0984359726299,
+            369.75443373830456
+          ]
+        ],
+        "origin_roi_px": [
+          [
+            92.59090909090901,
+            280.4350649350648
+          ],
+          [
+            1244.5909090909095,
+            420.07142857142844
+          ]
+        ],
+        "origin_points_px": [
+          [
+            226.37155425219942,
+            365.11776288227884
+          ],
+          [
+            1198.7586510263932,
+            368.8338919145369
+          ]
+        ],
+        "reference_name": "focused_20261110_140632_657006_06552f.tiff",
+        "reference_size": 1098496,
+        "reference_mtime_ns": 1794348392690000057
+      },
+      "signal_sigma_multiplier": 3.0,
+      "max_rgb_channel": 230.0,
+      "validity": "corrected R+G+B > multiplier * MANUAL spatial sample SD; every RGB channel < limit",
+      "dark_processing_fingerprint": "0c11a86a3ff9257de285a1b3a6b5cac7a2043db54239463867f988d32f770ac6",
+      "dark_statistics": [
+        {
+          "exposure_ms": 0.2,
+          "manual_mean_counts_diagnostic": 62.48007507324219,
+          "std_counts": 3.5763842943570725,
+          "pixels": 1310720,
+          "filename": "0p2_ms.bmp",
+          "sha256": "a0ab68b0dc77b50ea40be9e4eed3d9268313dd6df0879568c4a56cb1053672a6",
+          "original_mean_at_nominal_exposure_counts": 0.0
+        },
+        {
+          "exposure_ms": 1.0,
+          "manual_mean_counts_diagnostic": 63.64666900634766,
+          "std_counts": 3.585137747624848,
+          "pixels": 1310720,
+          "filename": "1_ms.bmp",
+          "sha256": "b911f524ec88d05c67c4c6c8a7412398d617ccade4afba98e0bb9a1d5e7d2d22",
+          "original_mean_at_nominal_exposure_counts": 0.0
+        },
+        {
+          "exposure_ms": 10.0,
+          "manual_mean_counts_diagnostic": 71.50632858276367,
+          "std_counts": 3.8395500990993807,
+          "pixels": 1310720,
+          "filename": "10_ms.bmp",
+          "sha256": "208ea02d5e7dc525800c43d605703b86b82a27b34b16195e38178451f5117afb",
+          "original_mean_at_nominal_exposure_counts": 0.0
+        },
+        {
+          "exposure_ms": 20.0,
+          "manual_mean_counts_diagnostic": 80.63972778320313,
+          "std_counts": 4.091694084034203,
+          "pixels": 1310720,
+          "filename": "20_ms.bmp",
+          "sha256": "6ecfe1e9b9b859b950a8bd9ce25a95bbc15b0ae231029d21f28e02a0ec5898bd",
+          "original_mean_at_nominal_exposure_counts": 2.9902763924528937e-05
+        },
+        {
+          "exposure_ms": 45.0,
+          "manual_mean_counts_diagnostic": 103.07176208496094,
+          "std_counts": 4.772863422423721,
+          "pixels": 1310720,
+          "filename": "45_ms.bmp",
+          "sha256": "88118d5e12752aaa51b9d3e251a9e451e9ecd0291c985ac6cc59d0f4f9fc0b67",
+          "original_mean_at_nominal_exposure_counts": 10.848029193127251
+        },
+        {
+          "exposure_ms": 90.0,
+          "manual_mean_counts_diagnostic": 147.26210327148436,
+          "std_counts": 6.172529762404882,
+          "pixels": 1310720,
+          "filename": "90_ms.bmp",
+          "sha256": "1f5c6a4238a173ead9e53d79d6c9eac19d4ad0ecf9d217830ad325fdcf92c68e",
+          "original_mean_at_nominal_exposure_counts": 52.6364132283643
+        }
+      ],
+      "excluded_requested_exposures_ms": [],
+      "hdr_selection": "longest_valid_exposure",
+      "intensity_definition": "dark-corrected R+G+B counts / actual exposure seconds"
+    },
+    "1": {
+      "name": "Gen1_ca_4C_ion1_729nm_crosstalk",
+      "signal_run": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/Gen1_ca_4C_FINAL/Ion1/729_nm_crosstalk/signal_20261110_142625_80vcwmji",
+      "own_reference": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/Gen1_ca_4C_FINAL/Ion1/729_nm_crosstalk/focused_20261110_142557_198175_1433f8.tiff",
+      "alignment": {
+        "angle_deg": 0.570088444998888,
+        "origin_px": [
+          720.0563468789276,
+          367.8418516966902
+        ],
+        "pixel_pitch_um": [
+          5.3,
+          5.3
+        ],
+        "magnification": 50.0,
+        "method": "independent manual selection with two view-only zoom boxes",
+        "zoom_display_brightness_gain": 4.0,
+        "rotation_roi_px": [
+          [
+            122.51298701298697,
+            303.70779220779207
+          ],
+          [
+            1254.5649350649353,
+            435.0324675324674
+          ]
+        ],
+        "rotation_points_px": [
+          [
+            228.4146208630079,
+            362.0665689149558
+          ],
+          [
+            1207.0917888563051,
+            371.80465018852095
+          ]
+        ],
+        "origin_roi_px": [
+          [
+            125.83766233766232,
+            293.7337662337661
+          ],
+          [
+            1247.9155844155848,
+            425.0584415584415
+          ]
+        ],
+        "origin_points_px": [
+          [
+            235.632383745287,
+            369.048387096774
+          ],
+          [
+            1204.4803100125682,
+            366.6353162966064
+          ]
+        ],
+        "reference_name": "focused_20261110_142557_198175_1433f8.tiff",
+        "reference_size": 1104862,
+        "reference_mtime_ns": 1794349557223999977
+      },
+      "signal_sigma_multiplier": 3.0,
+      "max_rgb_channel": 230.0,
+      "validity": "corrected R+G+B > multiplier * MANUAL spatial sample SD; every RGB channel < limit",
+      "dark_processing_fingerprint": "0c11a86a3ff9257de285a1b3a6b5cac7a2043db54239463867f988d32f770ac6",
+      "dark_statistics": [
+        {
+          "exposure_ms": 0.2,
+          "manual_mean_counts_diagnostic": 62.48007507324219,
+          "std_counts": 3.5763842943570725,
+          "pixels": 1310720,
+          "filename": "0p2_ms.bmp",
+          "sha256": "a0ab68b0dc77b50ea40be9e4eed3d9268313dd6df0879568c4a56cb1053672a6",
+          "original_mean_at_nominal_exposure_counts": 0.0
+        },
+        {
+          "exposure_ms": 1.0,
+          "manual_mean_counts_diagnostic": 63.64666900634766,
+          "std_counts": 3.585137747624848,
+          "pixels": 1310720,
+          "filename": "1_ms.bmp",
+          "sha256": "b911f524ec88d05c67c4c6c8a7412398d617ccade4afba98e0bb9a1d5e7d2d22",
+          "original_mean_at_nominal_exposure_counts": 0.0
+        },
+        {
+          "exposure_ms": 10.0,
+          "manual_mean_counts_diagnostic": 71.50632858276367,
+          "std_counts": 3.8395500990993807,
+          "pixels": 1310720,
+          "filename": "10_ms.bmp",
+          "sha256": "208ea02d5e7dc525800c43d605703b86b82a27b34b16195e38178451f5117afb",
+          "original_mean_at_nominal_exposure_counts": 0.0
+        },
+        {
+          "exposure_ms": 20.0,
+          "manual_mean_counts_diagnostic": 80.63972778320313,
+          "std_counts": 4.091694084034203,
+          "pixels": 1310720,
+          "filename": "20_ms.bmp",
+          "sha256": "6ecfe1e9b9b859b950a8bd9ce25a95bbc15b0ae231029d21f28e02a0ec5898bd",
+          "original_mean_at_nominal_exposure_counts": 2.9902763924528937e-05
+        },
+        {
+          "exposure_ms": 45.0,
+          "manual_mean_counts_diagnostic": 103.07176208496094,
+          "std_counts": 4.772863422423721,
+          "pixels": 1310720,
+          "filename": "45_ms.bmp",
+          "sha256": "88118d5e12752aaa51b9d3e251a9e451e9ecd0291c985ac6cc59d0f4f9fc0b67",
+          "original_mean_at_nominal_exposure_counts": 10.848029193127251
+        },
+        {
+          "exposure_ms": 90.0,
+          "manual_mean_counts_diagnostic": 147.26210327148436,
+          "std_counts": 6.172529762404882,
+          "pixels": 1310720,
+          "filename": "90_ms.bmp",
+          "sha256": "1f5c6a4238a173ead9e53d79d6c9eac19d4ad0ecf9d217830ad325fdcf92c68e",
+          "original_mean_at_nominal_exposure_counts": 52.6364132283643
+        }
+      ],
+      "excluded_requested_exposures_ms": [],
+      "hdr_selection": "longest_valid_exposure",
+      "intensity_definition": "dark-corrected R+G+B counts / actual exposure seconds"
+    }
+  }
+}

@@ -1,0 +1,3 @@
+wavelength_nm,dataset,reference_height_um,peak_x_um,peak_y_um,reference_peak_counts_s,reference_exposure_ms,reference_nominal_exposure_ms,native_radial_step_um,radial_samples,radial_sample_step_um,height_sample_step_um
+729,729_nm_crosstalk,75.0,4.108446428571427,-18.505517857142852,1397672.125,0.1996176338281601,0.2,0.10599999999999987,11,1.0,1.0
+830,830_nm_crosstalk,75.0,2.689750000000012,-26.223642857142853,921762.25,0.1996176338281601,0.2,0.1060000000000001,11,1.0,1.0

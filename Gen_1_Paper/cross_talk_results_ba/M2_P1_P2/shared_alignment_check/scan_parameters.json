@@ -1,0 +1,203 @@
+{
+  "height_range_um": [
+    72.0,
+    78.0
+  ],
+  "radial_range_um": [
+    12.0,
+    18.0
+  ],
+  "measurement": "unsmoothed sampled slice maxima; no manual reference offsets",
+  "target_spacing_um": 5.0,
+  "ranking": [
+    "max_abs_error_from_5_um",
+    "rms_error_from_5_um",
+    "distance_from_current_cut"
+  ],
+  "reference_alignments": {
+    "M2": {
+      "angle_deg": -0.0679664918603128,
+      "origin_px": [
+        727.8863147605084,
+        299.1658567239211
+      ],
+      "pixel_pitch_um": [
+        5.3,
+        5.3
+      ],
+      "magnification": 50.0,
+      "method": "independent manual selection with two view-only zoom boxes",
+      "zoom_display_brightness_gain": 4.0,
+      "rotation_roi_px": [
+        [
+          189.00649350649348,
+          257.16233766233756
+        ],
+        [
+          1264.5389610389614,
+          341.9415584415583
+        ]
+      ],
+      "rotation_points_px": [
+        [
+          238.73541404831724,
+          298.3954615277194
+        ],
+        [
+          1213.6535539729089,
+          297.23897500349096
+        ]
+      ],
+      "origin_roi_px": [
+        [
+          167.3961038961039,
+          235.55194805194787
+        ],
+        [
+          1257.8896103896107,
+          376.8506493506492
+        ]
+      ],
+      "origin_points_px": [
+        [
+          241.2682446585673,
+          300.3384303868173
+        ],
+        [
+          1214.5043848624496,
+          297.99328306102484
+        ]
+      ],
+      "reference_name": "focused_20261111_191837_331615_60c3ea.tiff",
+      "reference_size": 1100770,
+      "reference_mtime_ns": 1794453517362999916
+    },
+    "P1": {
+      "angle_deg": -0.14129633381846407,
+      "origin_px": [
+        728.0275240888144,
+        285.63121072475894
+      ],
+      "pixel_pitch_um": [
+        5.3,
+        5.3
+      ],
+      "magnification": 50.0,
+      "method": "independent manual selection with two view-only zoom boxes",
+      "zoom_display_brightness_gain": 4.0,
+      "rotation_roi_px": [
+        [
+          149.11038961038957,
+          205.62987012987003
+        ],
+        [
+          1264.5389610389614,
+          353.5779220779219
+        ]
+      ],
+      "rotation_points_px": [
+        [
+          242.66246334310847,
+          286.8002094679512
+        ],
+        [
+          1215.36415305125,
+          284.40143834659943
+        ]
+      ],
+      "origin_roi_px": [
+        [
+          159.08441558441552,
+          220.590909090909
+        ],
+        [
+          1254.5649350649353,
+          343.603896103896
+        ]
+      ],
+      "origin_points_px": [
+        [
+          241.53993855606754,
+          285.63121072475894
+        ],
+        [
+          1214.5151096215614,
+          285.63121072475894
+        ]
+      ],
+      "reference_name": "focused_20261111_181553_098371_54079d.tiff",
+      "reference_size": 1102068,
+      "reference_mtime_ns": 1794449753128000020
+    },
+    "P2": {
+      "angle_deg": -0.13513130490079786,
+      "origin_px": [
+        733.3371735791092,
+        296.2272727272727
+      ],
+      "pixel_pitch_um": [
+        5.3,
+        5.3
+      ],
+      "magnification": 50.0,
+      "method": "independent manual selection with two view-only zoom boxes",
+      "zoom_display_brightness_gain": 4.0,
+      "rotation_roi_px": [
+        [
+          185.68181818181813,
+          233.8896103896103
+        ],
+        [
+          1252.9025974025976,
+          346.92857142857133
+        ]
+      ],
+      "rotation_points_px": [
+        [
+          245.3543778801843,
+          298.44193548387085
+        ],
+        [
+          1218.4761206535402,
+          296.14683703393365
+        ]
+      ],
+      "origin_roi_px": [
+        [
+          149.11038961038957,
+          228.90259740259728
+        ],
+        [
+          1254.5649350649353,
+          363.551948051948
+        ]
+      ],
+      "origin_points_px": [
+        [
+          246.58057533863982,
+          296.2272727272727
+        ],
+        [
+          1220.0937718195785,
+          296.2272727272727
+        ]
+      ],
+      "reference_name": "focused_20261111_190807_019696_40384a.tiff",
+      "reference_size": 1082908,
+      "reference_mtime_ns": 1794452887051000118
+    }
+  },
+  "original_dark_path": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Dark_Frames/dark_20261002_113902_15MHz/dark_calibration.npz",
+  "manual_noise_path": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Dark_Frames/MANUAL",
+  "sigma_multiplier": 3.0,
+  "max_rgb_channel": 229.5,
+  "hdr_selection": "longest_valid_exposure",
+  "extended_height_range_um": [
+    79,
+    85
+  ],
+  "extended_radial_range_um": [
+    12,
+    22
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "angle_deg": -0.377935,
+  "origin_px": [
+    635.34821429,
+    609.48214286
+  ],
+  "pixel_pitch_um": [
+    5.3,
+    5.3
+  ],
+  "magnification": 50.0,
+  "method": "independent manual Ca selection recovered from earlier notebook output (printed precision)",
+  "reference_name": "focused_20261103_143343_710119_d89a18.tiff",
+  "reference_size": 1127842,
+  "reference_mtime_ns": 1793745223746000051
+}

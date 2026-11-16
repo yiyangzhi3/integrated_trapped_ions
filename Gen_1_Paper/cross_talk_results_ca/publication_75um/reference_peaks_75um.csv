@@ -1,0 +1,3 @@
+ion,dataset,reference_height_um,peak_x_um,peak_y_um,reference_peak_counts_s,reference_exposure_ms,reference_nominal_exposure_ms,native_radial_step_um,radial_samples,radial_sample_step_um,height_sample_step_um
+0,gen1_ca_ion0,75.0,1.901375,18.15155357142858,1327538.0,0.1996176338281601,0.2,0.10599999999999987,11,1.0,1.0
+1,gen1_ca_ion1,75.0,-3.6323928571428534,25.557357142857146,1077059.125,0.1996176338281601,0.2,0.10599999999999987,11,1.0,1.0

@@ -1,0 +1,123 @@
+{
+  "reference_height_um": 75.0,
+  "height_half_range_um": 10.0,
+  "radial_half_range_um": 5.0,
+  "radial_step_um": 1.0,
+  "height_step_um": 1.0,
+  "peak_search_half_width_um": null,
+  "peak_tracking": "maximum valid HDR rate on each nearest measured radial row and height plane",
+  "normalization": "central peak on the same height and radial slice",
+  "interpolation": "none; nearest measured height, radial row, and axial pixel",
+  "offsets_by_wavelength": {
+    "729": [
+      -5.0,
+      5.0
+    ],
+    "830": [
+      -5.0,
+      5.0
+    ]
+  },
+  "driven_channels_per_wavelength": 1,
+  "dark_calibration_path": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Dark_Frames/dark_20261002_113902_15MHz/dark_calibration.npz",
+  "dark_calibration_sha256": "62c206c89d8ad4d7cf9331427a4d70e53fd7eb26cbed005dcccada7e14c455f3",
+  "uncertainty_note": "Point estimates only: one signal frame per exposure/height; dark calibration stores spatial means, not variances.",
+  "color_limits_db": [
+    -40.0,
+    0.0
+  ],
+  "datasets": {
+    "729": {
+      "name": "729_nm_crosstalk",
+      "signal_run": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/Gen1_OG_take_FINAL/729_nm_crosstalk/signal_20261110_121105_cvd9o91e",
+      "own_reference": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/Gen1_OG_take_FINAL/729_nm_crosstalk/focused_20261110_120845_380438_8d685e.tiff",
+      "alignment": {
+        "angle_deg": -1.2768119196890484,
+        "origin_px": [
+          665.2410714285714,
+          721.5803571428571
+        ],
+        "pixel_pitch_um": [
+          5.3,
+          5.3
+        ],
+        "magnification": 50.0,
+        "method": "independent manual selection",
+        "rotation_points_px": [
+          [
+            109.73214285714278,
+            732.375
+          ],
+          [
+            1227.392857142857,
+            707.4642857142857
+          ]
+        ],
+        "origin_points_px": [
+          [
+            106.41071428571416,
+            722.4107142857142
+          ],
+          [
+            1224.0714285714287,
+            720.75
+          ]
+        ],
+        "reference_name": "focused_20261110_120845_380438_8d685e.tiff",
+        "reference_size": 1128206,
+        "reference_mtime_ns": 1794341325427999973
+      },
+      "min_corrected_signal": 5.0,
+      "max_rgb_channel": 230.0,
+      "excluded_requested_exposures_ms": [],
+      "hdr_selection": "longest_valid_exposure",
+      "intensity_definition": "dark-corrected R+G+B counts / actual exposure seconds"
+    },
+    "830": {
+      "name": "830_nm_crosstalk",
+      "signal_run": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/Gen1_OG_take_FINAL/830_nm_crosstalk/signal_20261110_122528_jearrt3n",
+      "own_reference": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/Gen1_OG_take_FINAL/830_nm_crosstalk/focused_20261110_122444_002210_e4dc58.tiff",
+      "alignment": {
+        "angle_deg": -1.0245544990727413,
+        "origin_px": [
+          697.6249999999999,
+          634.3928571428571
+        ],
+        "pixel_pitch_um": [
+          5.3,
+          5.3
+        ],
+        "magnification": 50.0,
+        "method": "independent manual selection",
+        "rotation_points_px": [
+          [
+            142.9464285714285,
+            642.6964285714286
+          ],
+          [
+            1257.2857142857142,
+            622.7678571428571
+          ]
+        ],
+        "origin_points_px": [
+          [
+            137.9642857142856,
+            634.3928571428571
+          ],
+          [
+            1257.2857142857142,
+            634.3928571428571
+          ]
+        ],
+        "reference_name": "focused_20261110_122444_002210_e4dc58.tiff",
+        "reference_size": 1170242,
+        "reference_mtime_ns": 1794342284030999898
+      },
+      "min_corrected_signal": 5.0,
+      "max_rgb_channel": 230.0,
+      "excluded_requested_exposures_ms": [],
+      "hdr_selection": "longest_valid_exposure",
+      "intensity_definition": "dark-corrected R+G+B counts / actual exposure seconds"
+    }
+  }
+}

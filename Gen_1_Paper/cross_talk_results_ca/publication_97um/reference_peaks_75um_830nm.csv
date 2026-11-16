@@ -1,0 +1,3 @@
+ion,dataset,reference_height_um,peak_x_um,peak_y_um,reference_peak_counts_s,reference_exposure_ms,reference_nominal_exposure_ms,native_radial_step_um,radial_samples,radial_sample_step_um,height_sample_step_um,wavelength_nm
+0,Gen1_ca_4C_ion0_830nm_crosstalk,75.0,-0.8300224828934669,19.344777963971538,330074.21875,0.9997750787224472,1.0,0.1060000000000001,11,1.0,1.0,830
+1,Gen1_ca_4C_ion1_830nm_crosstalk,75.0,3.0020914118139648,25.92019731881024,761455.8125,0.1996176338281601,0.2,0.10600000000000004,11,1.0,1.0,830

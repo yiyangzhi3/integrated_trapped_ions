@@ -1,0 +1,3 @@
+case,axial_offset_um,optical_ratio_db,fluorescence_ratio_db,s866_target_tilde,s866_neighbor_tilde
+Offset zero,0.0,-18.701735667817317,-0.05779572974397595,128.6607924542587,1.7348928422002186
+Most negative fluorescence ratio on scan grid,4.41,-8.936260680750715,-0.18066940121905078,3.763935888156991,0.4808572288835753

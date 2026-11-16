@@ -28,6 +28,105 @@ class Experimental_Analysis:
         self._background_selector = None
         self._background_close_id = None
 
+    @classmethod
+    def from_image(cls, image, x_um, y_um, *, height_um=0.0, exposure_ms=1.0):
+        """Analyze an already aligned height plane without writing an NPZ file.
+
+        Axes are physical pixel coordinates in µm, including any device flip.
+        The same maximum and axial/radial slice methods as saved scans apply.
+        """
+        image = np.asarray(image)
+        x, y = np.asarray(x_um, dtype=float), np.asarray(y_um, dtype=float)
+        if (image.ndim != 2 or x.ndim != 1 or y.ndim != 1
+                or image.shape != (len(y), len(x)) or min(image.shape) < 2
+                or not np.isfinite(image).all() or not np.isfinite(x).all()
+                or not np.isfinite(y).all()):
+            raise ValueError("Image must be finite 2-D data matching finite x/y axes.")
+        if any(not (np.all(np.diff(a) > 0) or np.all(np.diff(a) < 0)) for a in (x, y)):
+            raise ValueError("Image axes must be strictly monotonic.")
+        if not np.isfinite([height_um, exposure_ms]).all() or exposure_ms <= 0:
+            raise ValueError("Height must be finite and exposure positive and finite.")
+        analysis = cls.__new__(cls)
+        analysis.height_um = np.array([height_um], dtype=float)
+        analysis.intensity = image[None, ...]
+        analysis.exposure_ms = np.array([exposure_ms], dtype=float)
+        analysis.x_um, analysis.y_um = x.copy(), y.copy()
+        analysis.angle_deg = 0.0  # Rotation is already included in the supplied plane.
+        analysis._background_selector = None
+        analysis._background_close_id = None
+        return analysis.select_height(height_um, normalize=False)
+
+    @staticmethod
+    def fit_gaussian_profile(coordinates_um, counts, *, half_width_um=30.0):
+        """Fit I(u) = B + A exp(-2 (u-u0)^2 / w^2) near a profile's maximum.
+
+        w is the 1/e² intensity radius; FWHM = sqrt(2 ln 2) * w. Fit an
+        independent nonnegative constant background without smoothing or
+        resampling. Return measured samples, fitted values and fit diagnostics.
+        """
+        from scipy.optimize import curve_fit
+
+        x, values = np.asarray(coordinates_um, dtype=float), np.asarray(counts, dtype=float)
+        if x.ndim != 1 or values.shape != x.shape:
+            raise ValueError("Profile coordinates and counts must be matching 1-D arrays.")
+        if not np.isfinite(half_width_um) or half_width_um <= 0:
+            raise ValueError("Fit half-width must be positive and finite.")
+        valid = np.isfinite(x) & np.isfinite(values)
+        x, values = x[valid], values[valid]
+        if len(x) < 6 or not np.any(values > 0):
+            raise ValueError("At least six finite samples and positive signal are required.")
+        order = np.argsort(x)
+        x, values = x[order], values[order]
+        if np.any(np.diff(x) <= 0) or np.any(values < 0):
+            raise ValueError("Profile coordinates must be unique and counts nonnegative.")
+        peak_x = x[np.argmax(values)]
+        window = np.abs(x-peak_x) <= half_width_um
+        x, values = x[window], values[window]
+        if len(x) < 6 or np.ptp(values) <= 1e-10 * max(1.0, float(values.max())):
+            raise ValueError("Fit window needs at least six samples with nonconstant signal.")
+        scale = float(values.max())
+        normalized = values / scale
+        baseline = float(np.percentile(normalized, 10))
+        signal = np.maximum(normalized-baseline, 0)
+        # Shift the fit coordinate near zero for numerical stability.
+        u = x-peak_x
+        spacing, span = float(np.median(np.diff(x))), float(np.ptp(x))
+        radius0 = 2*np.sqrt(np.sum(signal*u*u)/np.sum(signal))
+        radius0 = np.clip(radius0, spacing, span)
+
+        def gaussian(u, amplitude, center, radius, background):
+            return background + amplitude*np.exp(-2*((u-center)/radius)**2)
+
+        parameters, _ = curve_fit(
+            gaussian, u, normalized, p0=(1-baseline, 0, radius0, baseline),
+            bounds=([0, u.min(), spacing/4, 0], [np.inf, u.max(), 2*span, np.inf]),
+            maxfev=20000,
+        )
+        amplitude, center, radius, background = parameters
+        fitted = gaussian(u, *parameters)*scale
+        residual = np.sum((values-fitted)**2)
+        total = np.sum((values-values.mean())**2)
+        fwhm = float(np.sqrt(2*np.log(2))*radius)
+        return dict(
+            radius_um=float(radius), fwhm_um=fwhm,
+            center_um=float(center+peak_x), amplitude_counts=float(amplitude*scale),
+            background_counts=float(background*scale), r_squared=float(1-residual/total),
+            half_max_covered=bool(x.min() <= center+peak_x-fwhm/2
+                                  and x.max() >= center+peak_x+fwhm/2),
+            coordinates_um=x, counts=values, fitted_counts=fitted,
+        )
+
+    def fit_beam_profiles(self, *, half_width_um=30.0):
+        """Fit axial x and radial y single-pixel cuts through the image maximum."""
+        if self.height_slice is None:
+            raise RuntimeError("Call select_height() first.")
+        x, axial = self.get_axial_slice()
+        y, radial = self.get_radial_slice()
+        return {
+            "axial": self.fit_gaussian_profile(x, axial, half_width_um=half_width_um),
+            "radial": self.fit_gaussian_profile(y, radial, half_width_um=half_width_um),
+        }
+
     def select_height(self, height_um, normalize=True, y_cut_um=None, x_cut_um=None):
         """Store the nearest height image, its maximum, and both profiles.
 

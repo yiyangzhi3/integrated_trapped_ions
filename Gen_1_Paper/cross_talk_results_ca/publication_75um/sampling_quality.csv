@@ -1,0 +1,3 @@
+ion,offset_um,valid_samples,total_samples,valid_fraction,min_db,max_db,max_abs_peak_shift_um,samples_below_color_min,samples_above_color_max
+0,-5.0,231,231,1.0,-27.371607584292295,-3.6475455406926693,3.074,0,0
+1,5.0,222,231,0.961038961038961,-23.624178785328343,-0.7512384992710539,6.784,0,0

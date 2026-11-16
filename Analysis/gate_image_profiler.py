@@ -95,7 +95,12 @@ class GateImageProfiler:
         return float(spacing[0]), float(spacing[1])
 
     def align_white_light(
-        self, image: ImageInput, *, brightness_offset: float = 50.0
+        self,
+        image: ImageInput,
+        *,
+        brightness_offset: float = 50.0,
+        select_rois: bool = True,
+        zoom_brightness_gain: float = 1.0,
     ) -> WhiteLightAlignment:
         """Interactively rotate the white-light image and define its origin.
 
@@ -104,29 +109,49 @@ class GateImageProfiler:
         2. LEFT and RIGHT points on that edge to determine its angle.
         3. NW and SE corners of a post-rotation ROI.
         4. LEFT and RIGHT trench edges; their midpoint is the physical origin.
+
+        With ``select_rois=False``, omit the ROI selections and show the full
+        image for each of the two point pairs (angle, then origin).
+        ``zoom_brightness_gain`` brightens the angle/origin selection displays
+        only; it never changes the returned reference or measurement pixels.
         """
+        if (not np.isscalar(zoom_brightness_gain)
+                or not np.isfinite(zoom_brightness_gain) or zoom_brightness_gain <= 0):
+            raise ValueError("zoom_brightness_gain must be positive and finite")
         self._require_interactive_backend()
         source = self._load_image(image)
         display_image = self._add_brightness(source, brightness_offset)
 
-        rotation_roi = self._pick_two_points(
-            display_image, "1/4  Select angle ROI: NW corner, then SE corner"
+        height, width = source.shape[:2]
+        full_roi = np.array([[0.0, 0.0], [width - 1.0, height - 1.0]])
+        rotation_roi = (
+            self._pick_two_points(
+                display_image, "1/4  Select angle ROI: NW corner, then SE corner"
+            )
+            if select_rois else full_roi
         )
         rotation_points = self._pick_two_points(
             display_image,
-            "2/4  Select trench angle: LEFT point, then RIGHT point",
+            ("2/4" if select_rois else "1/2")
+            + "  Select an edge to make horizontal: LEFT point, then RIGHT point",
             roi=rotation_roi,
+            display_gain=zoom_brightness_gain,
         )
         angle_deg = self._angle_from_points(rotation_points)
         rotated = self._rotate_crop(display_image, angle_deg)
 
-        center_roi = self._pick_two_points(
-            rotated, "3/4  Select origin ROI: NW corner, then SE corner"
+        center_roi = (
+            self._pick_two_points(
+                rotated, "3/4  Select origin ROI: NW corner, then SE corner"
+            )
+            if select_rois else full_roi
         )
         trench_edges = self._pick_two_points(
             rotated,
-            "4/4  Select trench edges: LEFT edge, then RIGHT edge",
+            ("4/4" if select_rois else "2/2")
+            + "  Select two points whose midpoint will be (0, 0)",
             roi=center_roi,
+            display_gain=zoom_brightness_gain,
         )
 
         self.alignment = self._build_alignment(
@@ -139,6 +164,20 @@ class GateImageProfiler:
         )
         self.frames = None  # A new alignment invalidates previously imported frames.
         return self.alignment
+
+    def rotate_image(self, image: ImageInput) -> np.ndarray:
+        """Apply the current reference rotation, retaining shape and dtype.
+
+        The returned image uses the alignment's centered coordinate axes.
+        Pixels outside the original field of view are filled with zero.
+        No brightness change, grayscale conversion, or normalization is applied.
+        """
+        if self.alignment is None:
+            raise RuntimeError("Call align_white_light() before rotate_image()")
+        source = self._load_image(image)
+        if source.shape[:2] != self.alignment.image.shape[:2]:
+            raise ValueError("Image dimensions must match the alignment reference")
+        return self._rotate_crop(source, self.alignment.angle_deg)
 
     def import_frames(
         self,
@@ -275,6 +314,23 @@ class GateImageProfiler:
             target[...] = bright.astype(result.dtype)
         return result
 
+    @staticmethod
+    def _scale_display_brightness(image: np.ndarray, gain: float) -> np.ndarray:
+        """Multiply a display copy, preserving alpha and leaving source pixels intact."""
+        if not np.isscalar(gain) or not np.isfinite(gain) or gain <= 0:
+            raise ValueError("display_gain must be positive and finite")
+        result = np.array(image, copy=True)
+        target = result[..., :3] if result.ndim == 3 and result.shape[2] == 4 else result
+        bright = target.astype(np.float64) * float(gain)
+        if np.issubdtype(result.dtype, np.integer):
+            limits = np.iinfo(result.dtype)
+            target[...] = np.rint(np.clip(bright, limits.min, limits.max)).astype(result.dtype)
+        else:
+            if not np.isfinite(bright).all():
+                raise OverflowError("Display brightness multiplication overflowed")
+            target[...] = bright.astype(result.dtype)
+        return result
+
     def _rotate_crop(self, image: np.ndarray, angle_deg: float) -> np.ndarray:
         rotated = ndimage.rotate(
             image.astype(np.float64),
@@ -333,12 +389,15 @@ class GateImageProfiler:
         title: str,
         *,
         roi: Optional[Sequence[Sequence[float]]] = None,
+        display_gain: float = 1.0,
     ) -> np.ndarray:
         height, width = image.shape[:2]
         fig, axis = plt.subplots(figsize=(12, 8))
-        display = image[..., 0] if image.ndim == 3 and image.shape[2] == 1 else image
+        display = cls._scale_display_brightness(image, display_gain)
+        display = display[..., 0] if display.ndim == 3 and display.shape[2] == 1 else display
         axis.imshow(display, origin="upper")
-        axis.set_title(title)
+        suffix = f"  [display brightness ×{display_gain:g}]" if display_gain != 1 else ""
+        axis.set_title(title + suffix)
         axis.set_xlabel("x / column [px]")
         axis.set_ylabel("y / row [px]")
 

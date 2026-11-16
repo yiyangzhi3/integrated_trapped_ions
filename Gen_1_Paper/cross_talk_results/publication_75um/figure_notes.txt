@@ -1,0 +1,5 @@
+Figures are displayed inline only. No standalone figure files are created or updated.
+
+Nominal sample coordinates: heights 65 to 85 um in 1 um steps and radial offsets -5 to +5 um in 1 um steps relative to each ion's maximum pixel at 75 um. At each target, select the nearest measured height and radial row, find the axial maximum on that measured row, and select the nearest axial pixel at each specified offset. No interpolation, intensity blending, or smoothing is used. Both nominal and actual sampled coordinates are recorded. The map color scale and reference-slice range are -40 to 0 dB.
+
+Nominal 1 ms signal exposures remain excluded for ions 0 and +1; ion -1 is unchanged. Original exposure-audit files remain as provenance. CSV and NPZ files contain the current sampled data, selected exposures, and actual coordinates. Confidence intervals are not available from the single-frame signal captures and mean-only dark calibration.

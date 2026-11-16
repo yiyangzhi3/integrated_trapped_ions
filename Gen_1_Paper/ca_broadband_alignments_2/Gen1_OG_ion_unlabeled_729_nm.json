@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "method": "manual two points to horizontal",
+  "ion_index": "unlabeled",
+  "wavelength_nm": 729,
+  "reference_path": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/Gen1_OG_take_FINAL/729_nm/focused_20261110_115825_855023_63361e.tiff",
+  "reference_sha256": "912ddc9e95411c3d105b249b989f01547c2983ccca0d8004ce2cd0c844a617ed",
+  "shape": [
+    1024,
+    1280
+  ],
+  "points_px": [
+    [
+      111.08793415767488,
+      703.0816334567221
+    ],
+    [
+      1218.720918327164,
+      681.3064109632198
+    ]
+  ],
+  "angle_deg": -1.1262463936614608,
+  "origin_px": [
+    661.3478975793819,
+    692.6584497242259
+  ],
+  "pixel_size_um": 5.3,
+  "magnification": 50.0,
+  "rotation_order": 0,
+  "reshape": false,
+  "created_utc": "2026-11-10T22:51:33.835296+00:00"
+}

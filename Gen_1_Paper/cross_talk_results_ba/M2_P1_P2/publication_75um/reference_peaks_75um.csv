@@ -1,0 +1,4 @@
+ion,dataset,reference_height_um,peak_x_um,peak_y_um,reference_peak_counts_s,reference_uses_fallback,reference_exposure_ms,reference_nominal_exposure_ms,native_radial_step_um,radial_samples,radial_sample_step_um,height_sample_step_um
+-1,Gen1_ba_4C_ion_P1,75.0,-6.256917553414326,13.819091663175552,1147193.25,False,0.1996176338281601,0.2,0.10599999999999987,11,1.0,1.0
+0,Gen1_ba_4C_ion_P2,75.0,-1.7317403993855711,13.649909090909095,1147193.25,False,0.1996176338281601,0.2,0.10599999999999987,11,1.0,1.0
+1,Gen1_ba_4C_ion_M2,75.0,2.6620506353861084,12.172419187264365,1147193.25,False,0.1996176338281601,0.2,0.10599999999999987,11,1.0,1.0

@@ -1,0 +1,36 @@
+{
+  "angle_deg": -0.786170617028639,
+  "origin_px": [
+    715.0625,
+    299.7589285714285
+  ],
+  "pixel_pitch_um": [
+    5.3,
+    5.3
+  ],
+  "magnification": 50.0,
+  "method": "independent manual selection",
+  "rotation_points_px": [
+    [
+      229.3035714285714,
+      305.57142857142844
+    ],
+    [
+      1197.5,
+      292.2857142857142
+    ]
+  ],
+  "origin_points_px": [
+    [
+      229.3035714285714,
+      302.2499999999999
+    ],
+    [
+      1200.8214285714287,
+      297.2678571428571
+    ]
+  ],
+  "reference_name": "focused_20261104_173932_936762_deffc8.tiff",
+  "reference_size": 1136592,
+  "reference_mtime_ns": 1793842772973000049
+}

@@ -1,0 +1,9 @@
+quantity,value,units
+Effective target repump parameter u,7183.399967527227,dimensionless
+Effective repump half-saturation input power,0.0069604922774767495,µW input (includes configured loss)
+Target fluorescence / plateau,0.9998608095311341,fraction
+Neighbor fluorescence / plateau,0.9862701484957785,fraction
+Fluorescence ratio,-0.05943657637489416,dB
+u required for -5 dB fluorescence,44.785054261852174,dimensionless
+866 input power for -5 dB fluorescence,0.3117260243359993,µW input (same coupling/overlap)
+866 power at ions for -5 dB fluorescence,0.019668582452041023,µW at ion plane

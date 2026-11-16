@@ -1,0 +1,233 @@
+{
+  "reference_height_um": 75.0,
+  "height_half_range_um": 10.0,
+  "radial_half_range_um": 5.0,
+  "radial_step_um": 1.0,
+  "height_step_um": 1.0,
+  "peak_search_half_width_um": null,
+  "peak_tracking": "maximum valid HDR rate on each nearest measured radial row and height plane",
+  "normalization": "central peak on the same height and radial slice",
+  "interpolation": "none; nearest measured height, radial row, and axial pixel",
+  "offsets_by_ion": {
+    "-1": [
+      5.0,
+      10.0
+    ],
+    "0": [
+      -5.0,
+      5.0
+    ],
+    "1": [
+      -5.0,
+      -10.0
+    ]
+  },
+  "dark_calibration_path": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Dark_Frames/dark_20261002_113902_15MHz/dark_calibration.npz",
+  "dark_calibration_sha256": "62c206c89d8ad4d7cf9331427a4d70e53fd7eb26cbed005dcccada7e14c455f3",
+  "uncertainty_note": "Point estimates only: one signal frame per exposure/height; saved dark calibration contains spatial means, not variances.",
+  "color_limits_db": [
+    -40.0,
+    0.0
+  ],
+  "datasets": {
+    "-1": {
+      "name": "ba_ionM1_2",
+      "signal_run": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/ba_ionM1_2/signal_20261104_123212_82sn8bcr",
+      "own_reference": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/ba_ionM1_2/focused_20261104_123137_149265_934465.tiff",
+      "alignment": {
+        "angle_deg": -1.0606626494173108,
+        "origin_px": [
+          649.4749197039521,
+          353.49927384443515
+        ],
+        "pixel_pitch_um": [
+          5.3,
+          5.3
+        ],
+        "magnification": 50.0,
+        "method": "independent manual selection with two view-only zoom boxes",
+        "rotation_roi_px": [
+          [
+            6.149350649350595,
+            252.17532467532453
+          ],
+          [
+            1277.8376623376628,
+            484.9025974025973
+          ]
+        ],
+        "rotation_points_px": [
+          [
+            21.190825303728502,
+            363.0693338919144
+          ],
+          [
+            1277.7350426913767,
+            339.80546007886676
+          ]
+        ],
+        "origin_roi_px": [
+          [
+            9.474025974025892,
+            277.11038961038946
+          ],
+          [
+            1274.5129870129874,
+            481.5779220779219
+          ]
+        ],
+        "origin_points_px": [
+          [
+            24.436852394916826,
+            350.7787599497277
+          ],
+          [
+            1274.5129870129874,
+            356.2197877391426
+          ]
+        ],
+        "reference_name": "focused_20261104_123137_149265_934465.tiff",
+        "reference_size": 1205076,
+        "reference_mtime_ns": 1793824297184999942
+      },
+      "min_corrected_signal": 5.0,
+      "max_rgb_channel": 220.0,
+      "excluded_requested_exposures_ms": [],
+      "hdr_selection": "highest valid dark-corrected R+G+B counts per actual exposure second"
+    },
+    "0": {
+      "name": "ba_ion0_2",
+      "signal_run": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/ba_ion0_2/signal_20261104_122336_rhgja199",
+      "own_reference": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/ba_ion0_2/focused_20261104_122258_659885_d86ee7.tiff",
+      "alignment": {
+        "angle_deg": -0.5598757901616713,
+        "origin_px": [
+          649.494581762324,
+          349.854643206256
+        ],
+        "pixel_pitch_um": [
+          5.3,
+          5.3
+        ],
+        "magnification": 50.0,
+        "method": "independent manual selection with two view-only zoom boxes",
+        "rotation_roi_px": [
+          [
+            7.811688311688215,
+            290.40909090909076
+          ],
+          [
+            1276.175324675325,
+            473.26623376623365
+          ]
+        ],
+        "rotation_points_px": [
+          [
+            20.08617511520731,
+            357.28868873062424
+          ],
+          [
+            1276.1753246753253,
+            345.0142019271051
+          ]
+        ],
+        "origin_roi_px": [
+          [
+            7.811688311688215,
+            280.4350649350648
+          ],
+          [
+            1276.175324675325,
+            544.7467532467531
+          ]
+        ],
+        "origin_points_px": [
+          [
+            22.81383884932265,
+            352.5823069403714
+          ],
+          [
+            1276.1753246753253,
+            347.12697947214065
+          ]
+        ],
+        "reference_name": "focused_20261104_122258_659885_d86ee7.tiff",
+        "reference_size": 1230528,
+        "reference_mtime_ns": 1793823778700000047
+      },
+      "min_corrected_signal": 5.0,
+      "max_rgb_channel": 220.0,
+      "excluded_requested_exposures_ms": [
+        1.0
+      ],
+      "hdr_selection": "highest valid dark-corrected R+G+B counts per actual exposure second"
+    },
+    "1": {
+      "name": "ba_ion1_2",
+      "signal_run": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/ba_ion1_2/signal_20261104_124015_cz3qo0h9",
+      "own_reference": "/Users/yiyangzhi/Library/CloudStorage/GoogleDrive-yiyang_zhi3@berkeley.edu/My Drive/Ming Wu Integrated Photonics Group/Experiments/Measurements/Gen1_Paper/ba_ion1_2/focused_20261104_123955_859198_b29ba6.tiff",
+      "alignment": {
+        "angle_deg": -0.5580581267716003,
+        "origin_px": [
+          644.576385979612,
+          358.9188521156261
+        ],
+        "pixel_pitch_um": [
+          5.3,
+          5.3
+        ],
+        "magnification": 50.0,
+        "method": "independent manual selection with two view-only zoom boxes",
+        "rotation_roi_px": [
+          [
+            7.811688311688215,
+            292.07142857142844
+          ],
+          [
+            1274.5129870129874,
+            513.1623376623376
+          ]
+        ],
+        "rotation_points_px": [
+          [
+            15.983954754922394,
+            361.755550900712
+          ],
+          [
+            1274.5129870129874,
+            349.49715123586077
+          ]
+        ],
+        "origin_roi_px": [
+          [
+            6.149350649350595,
+            302.0454545454544
+          ],
+          [
+            1276.175324675325,
+            464.9545454545454
+          ]
+        ],
+        "origin_points_px": [
+          [
+            14.343066610808506,
+            361.65009076944546
+          ],
+          [
+            1274.8097053484155,
+            356.1876134618068
+          ]
+        ],
+        "reference_name": "focused_20261104_123955_859198_b29ba6.tiff",
+        "reference_size": 1232838,
+        "reference_mtime_ns": 1793824795891999959
+      },
+      "min_corrected_signal": 5.0,
+      "max_rgb_channel": 220.0,
+      "excluded_requested_exposures_ms": [
+        1.0
+      ],
+      "hdr_selection": "highest valid dark-corrected R+G+B counts per actual exposure second"
+    }
+  }
+}

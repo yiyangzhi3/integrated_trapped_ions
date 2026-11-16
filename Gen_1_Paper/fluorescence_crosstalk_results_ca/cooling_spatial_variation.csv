@@ -1,0 +1,4 @@
+scenario,cooling_neighbor_ratio,fluorescence_ratio_db
+Uniform 397 nm excitation,1.0,-0.05943657637489416
+5 µm separation along 397 axis 1 (w = 20 µm),0.8824969025845955,-0.30916895708651254
+5 µm separation along 397 axis 2 (w = 100 µm),0.9950124791926823,-0.06910282530878661

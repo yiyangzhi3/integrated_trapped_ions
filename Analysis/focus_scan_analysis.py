@@ -4,6 +4,7 @@ Lumerical exports P[x, y]. Convert explicitly to image[y, x], then optionally
 mirror the physical x coordinate to match the laboratory comparison convention.
 """
 from pathlib import Path
+from itertools import cycle
 import re
 
 import numpy as np
@@ -264,6 +265,29 @@ def plot_ion0_axial_radial_map(scan, height_um=None, axial_axis="y",
     return fig, plane
 
 
+def plot_focus_observables(scan, label):
+    """Show measured peak intensity and fitted x/y radii over the exported planes."""
+    h = scan["height_above_chip_um"]
+    fig, axes = plt.subplots(1, 3, figsize=(15, 4.5), constrained_layout=True)
+    axes[0].plot(h, scan["max_intensity"], "o-", color=COLORS["data"], ms=4)
+    axes[0].set(title="Peak intensity", ylabel="Peak intensity (exported units)")
+    for ax, axis in zip(axes[1:], ("x", "y")):
+        radii = scan["radii_um"][axis]
+        resolved = np.array([plane["fits"][axis]["window_resolved"] for plane in scan["planes"]])
+        ax.plot(h, radii, "-", color=COLORS["data"])
+        ax.plot(h[resolved], radii[resolved], "o", color=COLORS["data"], ms=4)
+        if np.any(~resolved):
+            ax.plot(h[~resolved], radii[~resolved], "o", mfc="white", mec=COLORS["data"], ms=5,
+                    label=f"Window-limited: {np.count_nonzero(~resolved)}/{len(h)} planes")
+            ax.legend(loc="best", fontsize=9)
+        ax.set(title=f"{axis}-direction beam waist", ylabel=fr"$w_{axis}$, 1/e² intensity radius (µm)")
+    for ax in axes:
+        ax.set_xlabel("Height above chip (µm)")
+        _style_axis(ax)
+    fig.suptitle(f"{label} · intensity and transverse beam waists")
+    return fig
+
+
 def plot_focus_propagation(scan, label):
     """Peak intensity and narrow-axis radius, with independently fitted focus."""
     fit = scan["focus_fit"]
@@ -344,8 +368,8 @@ def report_focus_offsets(scan, reference_position_um=0.0):
 def plot_focus_comparison(scans):
     """Compare sampled scan curves and fit-derived focal heights across meshes."""
     fig, axes = plt.subplots(1, 2, figsize=(13, 5.2), constrained_layout=True)
-    palette = ["#E59A36", "#4C78A8", "#269B84"]
-    for (label, scan), color in zip(scans.items(), palette):
+    palette = ["#E59A36", "#4C78A8", "#269B84", "#9467BD", "#C44E52", "#81725B"]
+    for (label, scan), color in zip(scans.items(), cycle(palette)):
         h, fit = scan["height_above_chip_um"], scan["focus_fit"]
         dense = np.linspace(h.min(), h.max(), 400)
         axes[0].plot(h, scan["max_intensity"], "o", ms=3.8, mfc="white", color=color)
@@ -357,4 +381,26 @@ def plot_focus_comparison(scans):
         _style_axis(ax)
         ax.legend(loc="best", fontsize=9)
     fig.suptitle("Focus Analysis across Mesh Settings")
+    return fig
+
+
+def plot_focus_mesh_convergence(mesh_dividers, scans):
+    """Plot fitted focus heights and minimum radius against the supplied mesh dividers."""
+    dividers = np.asarray(mesh_dividers, dtype=float)
+    if dividers.ndim != 1 or len(dividers) != len(scans) or not np.all(np.diff(dividers) > 0):
+        raise ValueError("Supply one increasing mesh divider per scan.")
+    fits = [scan["focus_fit"] for scan in scans.values()]
+    fig, axes = plt.subplots(1, 3, figsize=(15, 4.5), constrained_layout=True)
+    specifications = [
+        ("intensity_focus_above_chip_um", "Intensity-fit focus", "Height above chip (µm)", "#4C78A8"),
+        ("waist_focus_above_chip_um", "Radius-fit focus", "Height above chip (µm)", "#269B84"),
+        ("minimum_radius_um", "Minimum y radius", "1/e² intensity radius (µm)", "#9467BD"),
+    ]
+    for ax, (key, title, ylabel, color) in zip(axes, specifications):
+        ax.plot(dividers, [fit[key] for fit in fits], "o-", color=color, ms=6,
+                mfc="white", mew=1.5)
+        ax.set(xlabel="Mesh divider", ylabel=ylabel, title=title)
+        _style_axis(ax)
+        ax.set_xticks(dividers)
+    fig.suptitle("Focus convergence with mesh divider")
     return fig

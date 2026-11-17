@@ -1,0 +1,116 @@
+# Append this after the supplied PEC setup, or run in its current group scope.
+# This coats ONLY the two axis-aligned beam-facing overhang surfaces.
+# The STL mirror is intentionally unchanged until its actual surface is known.
+# Rebuild the PEC setup before changing the skin thickness and running again.
+# This script does not start a simulation or guarantee a memory budget.
+
+al_skin_thickness = 80e-9;
+al_normal_step = 5e-9;
+al_tangent_step = source_wavelength/14;
+al_material = "Al (Aluminium) - CRC";
+
+# Validate before changing geometry. Never silently make the Al film thinner.
+if (getnamednumber("overhang_metal_1") != 1) {
+    ?("ERROR: expected one overhang_metal_1 in the current group scope.");
+    break;
+}
+if (getnamednumber("overhang_metal_2") != 1) {
+    ?("ERROR: expected one overhang_metal_2 in the current group scope.");
+    break;
+}
+if ((getnamednumber("overhang_1_Al_skin") > 0) |
+    (getnamednumber("overhang_2_Al_skin") > 0)) {
+    ?("ERROR: skins already exist. Rebuild the original PEC setup before rerunning.");
+    break;
+}
+
+# Save the original physical faces before recessing either PEC core.
+o1_xmin = getnamed("overhang_metal_1", "x min");
+o1_xmax = getnamed("overhang_metal_1", "x max");
+o1_ymin = getnamed("overhang_metal_1", "y min");
+o1_ymax = getnamed("overhang_metal_1", "y max");
+o1_zmin = getnamed("overhang_metal_1", "z min");
+o1_zmax = getnamed("overhang_metal_1", "z max");
+o2_xmin = getnamed("overhang_metal_2", "x min");
+o2_xmax = getnamed("overhang_metal_2", "x max");
+o2_ymin = getnamed("overhang_metal_2", "y min");
+o2_ymax = getnamed("overhang_metal_2", "y max");
+o2_zmin = getnamed("overhang_metal_2", "z min");
+o2_zmax = getnamed("overhang_metal_2", "z max");
+
+if (((o1_zmax-o1_zmin) <= al_skin_thickness) |
+    ((o2_xmax-o2_xmin) <= al_skin_thickness)) {
+    ?("ERROR: a coating body is too thin for an 80 nm Al layer plus PEC core.");
+    ?("Use the actual finite Al film there; do not silently reduce the Al thickness.");
+    break;
+}
+if (getnamed("FDTD", "min mesh step") > al_normal_step) {
+    ?("ERROR: FDTD min mesh step prevents the requested Al normal step.");
+    break;
+}
+
+# Surface 1: underside, facing light approaching from smaller z.
+# Its original outer face remains at o1_zmin.
+setnamed("overhang_metal_1", "material", "PEC (Perfect Electrical Conductor)");
+setnamed("overhang_metal_1", "z min", o1_zmin+al_skin_thickness);
+addrect;
+set("name", "overhang_1_Al_skin");
+set("material", al_material);
+set("x min", o1_xmin);
+set("x max", o1_xmax);
+set("y min", o1_ymin);
+set("y max", o1_ymax);
+set("z min", o1_zmin);
+set("z max", o1_zmin+al_skin_thickness);
+
+# Explicitly control ALL axes within the Al object's bounding box. Otherwise,
+# Al's automatic absorption-based refinement can make tangential axes fine too.
+addmesh;
+set("name", "mesh_overhang_1_Al_skin");
+set("override x mesh", 1);
+set("override y mesh", 1);
+set("override z mesh", 1);
+set("set maximum mesh step", 1);
+set("x min", o1_xmin);
+set("x max", o1_xmax);
+set("y min", o1_ymin);
+set("y max", o1_ymax);
+set("z min", o1_zmin-al_normal_step);
+set("z max", o1_zmin+al_skin_thickness+al_normal_step);
+set("dx", al_tangent_step);
+set("dy", al_tangent_step);
+set("dz", al_normal_step);
+
+# Surface 2: front face, facing light approaching from smaller x.
+# Its original outer face remains at o2_xmin.
+setnamed("overhang_metal_2", "material", "PEC (Perfect Electrical Conductor)");
+setnamed("overhang_metal_2", "x min", o2_xmin+al_skin_thickness);
+addrect;
+set("name", "overhang_2_Al_skin");
+set("material", al_material);
+set("x min", o2_xmin);
+set("x max", o2_xmin+al_skin_thickness);
+set("y min", o2_ymin);
+set("y max", o2_ymax);
+set("z min", o2_zmin);
+set("z max", o2_zmax);
+
+addmesh;
+set("name", "mesh_overhang_2_Al_skin");
+set("override x mesh", 1);
+set("override y mesh", 1);
+set("override z mesh", 1);
+set("set maximum mesh step", 1);
+set("x min", o2_xmin-al_normal_step);
+set("x max", o2_xmin+al_skin_thickness+al_normal_step);
+set("y min", o2_ymin);
+set("y max", o2_ymax);
+set("z min", o2_zmin);
+set("z max", o2_zmax);
+set("dx", al_normal_step);
+set("dy", al_tangent_step);
+set("dz", al_tangent_step);
+
+?("Added inside Al skins on the two beam-facing overhang faces; outer faces unchanged.");
+?("STL mirror remains PEC. Inspect the memory report before running.");
+?("Validate reflection phase/power by refining the 5 nm normal step to 2.5 nm.");

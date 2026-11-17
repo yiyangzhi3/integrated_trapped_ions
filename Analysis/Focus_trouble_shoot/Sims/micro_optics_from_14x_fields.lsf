@@ -1,0 +1,240 @@
+deleteall;
+
+# Downstream micro-optics driven by the saved 14X planar-lens E/H field.
+# Uses the same existing micro-optics, geometry, and monitor parameters.
+
+field_file = "/home/philip_jacobson/Desktop/Planar_lens_scale_14X/xy_lambda_o4_z_12nm/lens.mat";
+matlabload(field_file);
+
+# Lens-tip coordinate in the EXPORTING setup. These parameters must match
+# the saved 14X run. The current micro-optics setup defines that tip at x=0.
+saved_lens_tip_x = (slab_prop + Lens_offset + ring_radius)*scale_factor;
+x_inject = E.x(1)-saved_lens_tip_x;
+source_wavelength = c/E.f(1);
+
+# Translate the recorded plane; preserve every complex field component.
+EM = rectilineardataset("14X lens fields", E.x-saved_lens_tip_x, E.y, E.z);
+EM.addparameter("lambda", c/E.f, "f", E.f);
+EM.addattribute("E", E.Ex, E.Ey, E.Ez);
+EM.addattribute("H", H.Hx, H.Hy, H.Hz);
+
+# Reduced simulation bounds, with room around the imported source for PML.
+source_padding = 2e-6;
+fdtd_x_min = x_inject-source_padding;
+fdtd_x_max = monitor_offset*monitor_num+1e-6+focus_monitor_offset+mirror_space+FDTD_x_extra;
+y_span = max([max([2*ring_radius*scale_factor, slab_width*scale_factor])-FDTD_y_save,
+              max(E.y)-min(E.y)+2*source_padding]);
+fdtd_z_min = min([-Oxide_height-FDTD_z_extra-1e-6, min(E.z)-source_padding]);
+fdtd_z_max = max([Oxide_height+FDTD_z_extra+1e-6, max(E.z)+source_padding]);
+
+#lens1
+filename = file_path + lens1_name;
+?filename;
+stlimport(filename);
+
+set("name","lens1");
+set('first axis', 'z');
+set('second axis', 'y');
+set('third axis', 'x');
+set("material", "<Object defined dielectric>");
+set('index', lens_index);
+
+set('rotation 1', 90);
+set('rotation 2', 90);
+
+set('x', lens1_offset);
+set('y', 0);
+set('z', 0);
+
+#M1
+filename = file_path + mirror_name;
+?filename;
+stlimport(filename);
+
+set("name","45 deg mirror");
+set('first axis', 'z');
+set('second axis', 'y');
+set('third axis', 'x');
+set("material", "Al (Aluminium) - CRC");
+
+set('rotation 1', 90);
+set('rotation 2', 90);
+
+set('x', mirror_offset);
+set('y', 0);
+set('z', 0);
+
+#overhang
+filename = file_path + overhang_name;
+?filename;
+stlimport(filename);
+
+set("name","overhang");
+set('first axis', 'z');
+set('second axis', 'y');
+set('third axis', 'x');
+set("material", "<Object defined dielectric>");
+set('index', lens_index);
+
+set('rotation 1', 90);
+set('rotation 2', 90);
+
+set('x', lens1_offset);
+set('y', 0);
+set('z', 0);
+
+#overhang: metal coats
+addrect;
+set("name","overhang_metal_1");
+set("x min", -overhang_metal_offset);
+set("x max",-overhang_metal_offset+overhang_metal_length);
+set("z min",Oxide_height+1e-6);
+set("z max", Oxide_height+overhang_metal_thickness+1e-6);
+set("y",0);
+set("y span", overhang_metal_width);
+set("material", "Al (Aluminium) - CRC");
+
+#overhang: metal coats#2
+addrect;
+set("name","overhang_metal_2");
+set("x min", overhang_metal2_offset);
+set("x max",overhang_metal2_offset+overhang_metal_thickness);
+set("z min",Oxide_height-1e-6);
+set("z max", Oxide_height+1e-6);
+set("y",0);
+set("y span", overhang_metal_width);
+set("material", "Al (Aluminium) - CRC");
+
+
+#add FDTD 
+addfdtd;
+set("name", "FDTD");
+set("dimension",2);  #  1 = 2D, 2 = 3D
+set("x min",fdtd_x_min);
+set("x max", fdtd_x_max);
+set("y",0);
+set("y span",y_span);
+set("z min",fdtd_z_min);
+set("z max",fdtd_z_max);
+set('auto shutoff min', 1e-4);
+set('simulation time', 10000e-15);
+set('x min bc', 'PML');
+set('x max bc', 'PML');
+set('y min bc', 'PML');
+set('y max bc', 'PML');
+set('z min bc', 'PML');
+set('z max bc', 'PML');
+set('mesh accuracy', mesh_accuracy);
+set("mesh type", "auto non-uniform");
+set("mesh refinement", "conformal variant 0");
+
+for(i=1:monitor_num){
+
+#far field monitor
+addpower;
+set('name', 'monitor_'+ num2str(i));
+set("x", monitor_offset*i);
+set("monitor type",'2D X-normal'); 
+set("y",0);
+set("y span",y_span);
+set("z",0);
+set("z span",2*Oxide_height);
+set('override global monitor settings', 1);
+set('use source limits', 1);
+
+}
+
+addpower;
+set('name', 'focus_monitor');
+set("x", focus_monitor_offset);
+set("monitor type",'2D X-normal'); 
+set("y",0);
+set("y span",y_span);
+set("z",0);
+set("z span",2*Oxide_height);
+set('override global monitor settings', 1);
+set('use source limits', 1);
+
+addpower;
+set('name', 'out_of_plane');
+set("monitor type",'2D Z-normal'); 
+set("z", Oxide_height + FDTD_z_extra);
+
+set("y",0);
+set("y span",y_span);
+set("x max", monitor_offset*monitor_num+1e-6+focus_monitor_offset+mirror_space-out_of_plane_x_offset);
+set("x min", monitor_offset*monitor_num+1e-6+focus_monitor_offset-out_of_plane_x_offset);
+set('override global monitor settings', 1);
+set('use source limits', 1);
+
+# Imported source replaces the planar lens, input waveguide, and mode source.
+addimportedsource;
+set("name", "lens_field_source");
+importdataset(EM);
+set("direction", "Forward");
+set("x", x_inject);
+set("y", 0);
+set("z", 0);
+set("amplitude", 1);
+set("phase", 0);
+set("wavelength start", source_wavelength);
+set("wavelength stop", source_wavelength);
+
+#add a in plane monitor
+addpower;
+set('name', 'm_inplane');
+set("monitor type",'2D Z-normal'); 
+set("x min",fdtd_x_min);
+set("x max", fdtd_x_max);
+set("y",0);
+set("y span",y_span);
+set("z",0);
+set('override global monitor settings', 1);
+set('use source limits', 1);
+
+# Global mesh override: retain the original lambda/14 setting.
+addmesh;
+set("override x mesh", 1);
+set("override y mesh", 1);
+set("override z mesh", 1);
+set("set maximum mesh step", 1);
+set("x min",fdtd_x_min);
+set("x max", fdtd_x_max);
+set("y",0);
+set("y span",y_span);
+set("z min",fdtd_z_min);
+set("z max",fdtd_z_max);
+set('dx', source_wavelength/14);
+set('dy', source_wavelength/14);
+set('dz', source_wavelength/14);
+
+# Micro-optics mesh override: retain the original lambda/16 setting.
+addmesh;
+set("override x mesh", 1);
+set("override y mesh", 1);
+set("override z mesh", 1);
+set("set maximum mesh step", 1);
+set("x min",lens1_offset-20e-6);
+set("x max", fdtd_x_max);
+set("y",0);
+set("y span",y_span);
+set("z min",-Oxide_height);
+set("z max",Oxide_height);
+set('dx', source_wavelength/16);
+set('dy', source_wavelength/16);
+set('dz', source_wavelength/16);
+
+#add side monitor
+addpower;
+set('name', 'm_side');
+set("monitor type",'2D Y-normal'); 
+set("x min",fdtd_x_min);
+set("x max", fdtd_x_max);
+set("y",0);
+set("z min",fdtd_z_min);
+set("z max",fdtd_z_max);
+set('override global monitor settings', 1);
+set('use source limits', 1);
+
+?("Imported 14X E/H field at " + num2str(source_wavelength*1e9) + " nm.");
+?("Source x = " + num2str(x_inject*1e6) + " um relative to the planar-lens tip.");
